@@ -24,6 +24,7 @@ class Player {
     updatePlayer() {
         this.drawPlayer();
         this.position.y += this.velocity.y;
+        this.position.x += this.velocity.x;
 
         if (this.position.y + this.heigth + this.velocity.y <= canvas.height) {
             this.velocity.y += gravity;
@@ -35,13 +36,68 @@ class Player {
 
 //draw new player by creating an object and call the drawPlayer method
 const player = new Player();
+const keys = {
+    right: {
+        pressed: false
+    },
+    left: {
+        pressed: false
+    }
+};
 
 //Animation
 function animation() {
     requestAnimationFrame(animation);
     context.clearRect(0, 0, canvas.width, canvas.height);
     player.updatePlayer();
+
+    if (keys.right.pressed) {
+        player.velocity.x = 5;
+    } else if (keys.left.pressed) {
+        player.velocity.x = -5;
+    } else {
+        player.velocity.x = 0;
+    }
 };
 
 animation();
+
+//Event listener for pressed keys
+window.addEventListener('keydown', ({ code }) => {
+
+    switch (code) {
+        case 'KeyA':
+            keys.left.pressed = true;
+            break;
+        case 'KeyD':
+            keys.right.pressed = true;
+            //console.log(keys.right.pressed)
+            break;
+        case 'KeyW':
+            player.velocity.y -= 2;
+            break;
+        case 'KeyS':
+            console.log('down')
+            break;
+    }
+});
+
+window.addEventListener('keyup', ({ code }) => {
+
+    switch (code) {
+        case 'KeyA':
+            keys.left.pressed = false;
+            break;
+        case 'KeyD':
+            keys.right.pressed = false;
+            //console.log(keys.right.pressed)
+            break;
+        case 'KeyW':
+            player.velocity.y -= 20;
+            break;
+        case 'KeyS':
+            console.log('down')
+            break;
+    }
+});
 //console.log(context)
